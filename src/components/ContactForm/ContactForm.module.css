@@ -1,0 +1,35 @@
+.formLabel {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.inputField {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 96.5%;
+  margin-bottom: 10px;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 12px;
+  margin-top: -8px;
+}
+
+.submitButton {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  width: 100%;
+}
+
+.submitButton:hover {
+  background-color: #1565c0;
+}

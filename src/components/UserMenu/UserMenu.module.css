@@ -1,0 +1,36 @@
+.button {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #1565c0;
+}
+
+.link {
+  text-decoration: none;
+  margin-right: 15px;
+  font-size: 18px;
+  color: #1976d2;
+  transition: color 0.3s;
+}
+
+.activeLink {
+  font-weight: bold;
+  color: #0d47a1;
+}
+
+.userWrap {
+  display: flex;
+  gap: 5px;
+  align-items: baseline;
+}
+
+.welcomeUser {
+  font-weight: bold;
+}
