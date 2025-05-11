@@ -1,88 +1,74 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { nanoid } from "nanoid";
-import * as Yup from "yup";
-import styles from "./ContactForm.module.css";
 import { useDispatch } from "react-redux";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { addContact } from "../../redux/contacts/operations";
+import toast, { Toaster } from "react-hot-toast";
+import css from "./ContactForm.module.css";
 
-import toast from "react-hot-toast";
-import { addContactThunk } from "../../redux/contacts/operations";
-
-const FeedbackSchema = Yup.object().shape({
+const ContactSchema = Yup.object().shape({
   name: Yup.string()
-    .min(3, "Too short! Min 3 symbols!")
-    .max(50, "Too long! Max 50 symbols!")
-    .required("Required!"),
+    .trim()
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required!!!"),
   number: Yup.string()
-    .min(3, "Too short! Min 3 symbols!")
-    .max(50, "Too long! Max 50 symbols!")
-    .required("Required!"),
+    .trim()
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required!!!"),
 });
 
-const initialValues = {
-  name: "",
-  number: "",
-};
-
-const ContactForm = () => {
+export default function ContactForm() {
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
-    dispatch(addContactThunk(values))
+    dispatch(addContact(values))
       .unwrap()
       .then(() => {
-        toast.success("New contact added successfully!");
+        toast.success("Contact added successfully");
       })
-      .catch(() => {
-        toast.error("Failed to add new contact! Try it later!");
+      .catch((error) => {
+        toast.error("Failed to add contact: " + error.message);
       });
     actions.resetForm();
   };
 
   return (
-    <div>
+    <>
       <Formik
-        initialValues={initialValues}
+        initialValues={{ name: "", number: "" }}
+        validationSchema={ContactSchema}
         onSubmit={handleSubmit}
-        validationSchema={FeedbackSchema}
       >
-        <Form>
-          <label htmlFor="name" className={styles.formLabel}>
-            Name:
-            <Field
-              id={nanoid()}
-              type="text"
-              name="name"
-              className={styles.inputField}
-            />
+        <Form className={css.contactForm}>
+          <label className={css.contactLabel} htmlFor="name">
+            Name
           </label>
-          <ErrorMessage
+          <Field
+            className={css.contactInput}
+            type="text"
             name="name"
-            component="span"
-            className={styles.errorMessage}
+            id="name"
           />
+          <ErrorMessage className={css.error} name="name" component="div" />
 
-          <label htmlFor="number" className={styles.formLabel}>
-            Number:
-            <Field
-              id={nanoid()}
-              type="text"
-              name="number"
-              className={styles.inputField}
-            />
+          <label className={css.contactLabel} htmlFor="number">
+            Number
           </label>
-          <ErrorMessage
+          <Field
+            className={css.contactInput}
+            type="text"
             name="number"
-            component="span"
-            className={styles.errorMessage}
+            id="number"
           />
+          <ErrorMessage className={css.error} name="number" component="div" />
 
-          <button type="submit" className={styles.submitButton}>
-            Submit
+          <button className={css.addContactBtn} type="submit">
+            Add contact
           </button>
         </Form>
       </Formik>
-    </div>
+      <Toaster />\
+    </>
   );
-};
-
-export default ContactForm;
+}

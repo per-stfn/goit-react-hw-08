@@ -1,151 +1,90 @@
+import { FaUserAlt } from "react-icons/fa";
+import { IoCall } from "react-icons/io5";
+import { deleteContact } from "../../redux/contacts/operations";
+import { changeContact } from "../../redux/contacts/operations"; // Імпортуємо функцію зміни контакту
+import css from "./Contact.module.css";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import styles from "./Contact.module.css";
-import { IoAccessibility, IoCall } from "react-icons/io5";
+import Modal from "react-modal";
+import toast, { Toaster } from "react-hot-toast";
 
-import toast from "react-hot-toast";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import {
-  deleteContactThunk,
-  updateContactThunk,
-} from "../../redux/contacts/operations";
+Modal.setAppElement("#root");
 
-const Contact = ({ name, number, id }) => {
+export default function Contact({ contactData }) {
   const dispatch = useDispatch();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [newContactData, setNewContactData] = useState(contactData);
 
-  const handleDelete = () => {
-    dispatch(deleteContactThunk(id))
+  const handleDelete = () => setIsModalOpen(true);
+  const handleConfirm = () => {
+    dispatch(deleteContact(contactData.id))
       .unwrap()
       .then(() => {
-        toast.success("Contact deleted successfully!");
-        setIsModalOpen(false);
+        toast.success("Contact deleted successfully");
       })
-      .catch(() => {
-        toast.error("Failed to delete contact! Try again later.");
-        setIsModalOpen(false);
+      .catch((error) => {
+        toast.error("Failed to delete contact: " + error.message);
       });
+    setIsModalOpen(false);
   };
+  const handleCancel = () => setIsModalOpen(false);
 
-  const handleUpdate = (values) => {
-    dispatch(updateContactThunk({ id, body: values }))
-      .unwrap()
-      .then(() => {
-        toast.success("Contact updated successfully!");
-        setIsEditMode(false);
-      })
-      .catch(() => {
-        toast.error("Failed to update contact! Try again later.");
-      });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewContactData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
-
-  const validationSchema = Yup.object().shape({
-    name: Yup.string()
-      .min(3, "Too short! Min 3 symbols!")
-      .max(50, "Too long! Max 50 symbols!")
-      .required("Required!"),
-    number: Yup.string()
-      .min(3, "Too short! Min 3 symbols!")
-      .max(50, "Too long! Max 50 symbols!")
-      .required("Required!"),
-  });
 
   return (
-    <div className={styles.cardWrap}>
-      <div className={styles.textWrap}>
-        {isEditMode ? (
-          <Formik
-            initialValues={{ name, number }}
-            validationSchema={validationSchema}
-            onSubmit={handleUpdate}
-          >
-            <Form className={styles.editForm}>
-              <label htmlFor="name" className={styles.formLabel}>
-                Name:
-                <Field type="text" name="name" className={styles.inputField} />
-                <ErrorMessage
-                  name="name"
-                  component="span"
-                  className={styles.errorMessage}
-                />
-              </label>
-
-              <label htmlFor="number" className={styles.formLabel}>
-                Number:
-                <Field
-                  type="text"
-                  name="number"
-                  className={styles.inputField}
-                />
-                <ErrorMessage
-                  name="number"
-                  component="span"
-                  className={styles.errorMessage}
-                />
-              </label>
-
-              <button type="submit" className={styles.confirmButton}>
-                Save
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsEditMode(false)}
-                className={styles.cancelButton}
-              >
-                Cancel
-              </button>
-            </Form>
-          </Formik>
-        ) : (
-          <>
-            <span className={styles.name}>
-              <IoAccessibility />
-              {name}
-            </span>
-            <span className={styles.number}>
-              <IoCall />
-              {number}
-            </span>
-          </>
-        )}
+    <>
+      <div className={css.paragraphsWrapper}>
+        <p className={css.contactParagraph}>
+          <FaUserAlt className={css.contactIcon} size="20" />
+          <input
+            type="text"
+            name="name"
+            value={newContactData.name}
+            onChange={handleChange}
+            className={css.changeContact}
+          />
+        </p>
+        <p className={css.contactParagraph}>
+          <IoCall className={css.contactIcon} size="20" />
+          <input
+            type="text"
+            name="number"
+            value={newContactData.number}
+            onChange={handleChange}
+            className={css.changeContact}
+          />
+        </p>
       </div>
-      <div>
-        <button
-          type="button"
-          className={styles.button}
-          onClick={() => setIsEditMode(true)}
-        >
-          Edit
-        </button>
-        <button
-          type="button"
-          className={styles.button}
-          onClick={() => setIsModalOpen(true)}
-        >
+      <div className={css.buttonWrapper}>
+        <button className={css.deleteBtn} onClick={handleDelete}>
           Delete
         </button>
       </div>
-
-      {isModalOpen && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <p>Are you sure you want to delete this contact?</p>
-            <button onClick={handleDelete} className={styles.confirmButton}>
-              Yes
-            </button>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className={styles.cancelButton}
-            >
-              No
-            </button>
-          </div>
+      <Modal
+        className={css.modal}
+        isOpen={isModalOpen}
+        onRequestClose={handleCancel}
+      >
+        <p className={css.paragraph}>
+          Are you sure you want to delete this contact?
+        </p>
+        <div>
+          <button className={css.actionBtn} onClick={handleConfirm}>
+            Confirm
+          </button>
+          <button className={css.actionBtn} onClick={handleCancel}>
+            Cancel
+          </button>
         </div>
-      )}
-    </div>
+      </Modal>
+      <Toaster />
+    </>
   );
-};
-
-export default Contact;
+}

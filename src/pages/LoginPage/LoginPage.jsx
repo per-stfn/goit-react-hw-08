@@ -1,135 +1,60 @@
-import {
-  Button,
-  TextField,
-  Box,
-  Typography,
-  Container,
-  CssBaseline,
-} from "@mui/material";
-import { Formik, Field, Form } from "formik";
-import { useDispatch } from "react-redux";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
 import { login } from "../../redux/auth/operations";
-import toast from "react-hot-toast";
-import { motion } from "framer-motion";
-import { slideInFromRight } from "../../motion/motion";
+import css from "./LoginPage.module.css";
 
-const LoginPage = () => {
+const loginSchema = Yup.object({
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+});
+
+export default function LoginPage() {
   const dispatch = useDispatch();
-  const initialValues = {
-    email: "",
-    password: "",
-  };
 
-  const validationSchema = Yup.object({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .max(33, "Password must not exceed 33 characters")
-      .required("Password is required"),
-  });
-
-  const handleSubmit = (values, options) => {
-    dispatch(login(values))
-      .unwrap()
-      .then((res) => {
-        toast.success(`Welcome ${res.user.name}!`);
-      })
-      .catch(() => {
-        toast.error("Invalid credentials");
-      });
-    options.resetForm();
+  const handleSubmit = (values, actions) => {
+    dispatch(login(values));
+    actions.resetForm();
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h3">
-          Sign in
-        </Typography>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ isSubmitting, handleChange, values, errors, touched }) => (
-            <Form>
-              <Field
-                as={TextField}
-                margin="normal"
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={values.email}
-                onChange={handleChange}
-                error={touched.email && Boolean(errors.email)}
-                helperText={touched.email && errors.email}
-              />
-              <Field
-                as={TextField}
-                margin="normal"
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={values.password}
-                onChange={handleChange}
-                error={touched.password && Boolean(errors.password)}
-                helperText={touched.password && errors.password}
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Signing in..." : "Sign In"}
-              </Button>
-              <motion.h2
-                initial="hidden"
-                animate="visible"
-                variants={slideInFromRight()}
-              >
-                Account Login
-              </motion.h2>
-              <motion.h3
-                initial="hidden"
-                animate="visible"
-                variants={slideInFromRight(1)}
-              >
-                Enter your details to access your personal contact collection.
-              </motion.h3>
-              <motion.p
-                initial="hidden"
-                animate="visible"
-                variants={slideInFromRight(1.2)}
-              >
-                If you dont have an account yet, you can sign up by clicking the
-                link below. Get back access to and manage your contacts with
-                ease!
-              </motion.p>
-            </Form>
-          )}
-        </Formik>
-      </Box>
-    </Container>
+    <Formik
+      initialValues={{ email: "", password: "" }}
+      validationSchema={loginSchema}
+      onSubmit={handleSubmit}
+    >
+      <Form className={css.loginForm}>
+        <h1>Please log in</h1>
+        <label htmlFor="emailId" className={css.labelLogin}>
+          Email:
+        </label>
+        <Field
+          type="email"
+          name="email"
+          id="emailId"
+          autoComplete="email"
+          className={css.inputLogin}
+        />
+        <ErrorMessage className={css.error} component="p" name="email" />
+        <label htmlFor="passwordId" className={css.labelLogin}>
+          Password:
+        </label>
+        <Field
+          type="password"
+          name="password"
+          id="passwordId"
+          autoComplete="current-password"
+          className={css.inputLogin}
+        />
+        <ErrorMessage className={css.error} component="p" name="password" />
+        <button type="submit" className={css.loginBtn}>
+          Log in
+        </button>
+      </Form>
+    </Formik>
   );
-};
-
-export default LoginPage;
+}

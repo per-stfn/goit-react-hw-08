@@ -1,50 +1,52 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { goitApi } from "../auth/operations";
+import axios from "axios";
+
+axios.defaults.baseURL = "https://connections-api.herokuapp.com";
 
 export const fetchContacts = createAsyncThunk(
-  "fetchData",
-  async (_, thunkApi) => {
+  "contacts/fetchContacts",
+  async (_, thunkAPI) => {
     try {
-      const { data } = await goitApi.get("/contacts");
-      return data;
+      const response = await axios.get("/contacts");
+      return response.data;
     } catch (error) {
-      return thunkApi.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-export const deleteContactThunk = createAsyncThunk(
-  "deleteContact",
-  async (id, thunkApi) => {
+export const addContact = createAsyncThunk(
+  "contacts/addContact",
+  async (newContact, thunkAPI) => {
     try {
-      const { data } = await goitApi.delete(`/contacts/${id}`);
-      return data.id;
+      const response = await axios.post("/contacts", newContact);
+      return response.data;
     } catch (error) {
-      return thunkApi.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-export const addContactThunk = createAsyncThunk(
-  "addContact",
-  async (body, thunkApi) => {
+export const deleteContact = createAsyncThunk(
+  "contacts/deleteContact",
+  async (contactId, thunkAPI) => {
     try {
-      const { data } = await goitApi.post(`/contacts`, body);
-      return data;
+      const response = await axios.delete(`/contacts/${contactId}`);
+      return response.data;
     } catch (error) {
-      return thunkApi.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );
 
-export const updateContactThunk = createAsyncThunk(
-  "updateContact",
-  async ({ body, id }, thunkApi) => {
+export const changeContact = createAsyncThunk(
+  "contacts/changeContact",
+  async ({ contactId, newData }, thunkAPI) => {
     try {
-      const { data } = await goitApi.patch(`/contacts/${id}`, body);
-      return data;
+      const response = await axios.patch(`/contacts/${contactId}`, newData);
+      return response.data;
     } catch (error) {
-      return thunkApi.rejectWithValue(error.message);
+      return thunkAPI.rejectWithValue(error.message);
     }
   }
 );

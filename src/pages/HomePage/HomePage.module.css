@@ -1,0 +1,28 @@
+.wrapper {
+  width: 400px;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.paragraph {
+  font-size: 18px;
+  text-align: center;
+  color: rgb(190, 18, 64);
+  padding: 8px;
+}
+
+.list {
+  list-style-type: circle;
+  max-width: 400px;
+}
+
+.listItem {
+  color: rgb(51, 26, 174);
+  font-size: 18px;
+  text-align: center;
+  color: rgb(190, 18, 64);
+
+  padding: 8px;
+}
