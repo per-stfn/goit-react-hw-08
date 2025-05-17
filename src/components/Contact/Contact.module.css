@@ -1,108 +1,32 @@
-.paragraphsWrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-.buttonWrapper {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.changeContact {
-  height: 32px;
-  width: 260px;
+.listItem {
+  border: 1px solid #f0f0f0;
   border-radius: 5px;
-  outline: none;
-  background-color: whitesmoke;
-  border: none;
-  margin-bottom: 4px;
-  font-style: 18px;
-  padding-left: 8px;
-  transition: bacground-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 300px;
 }
 
-.changeContact:hover,
-.changeContact:focus {
-  background-color: ivory;
+.infoItem {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+  align-items: center;
 }
 
 .deleteBtn {
-  width: 80px;
-  height: 40px;
-  border-radius: 5px;
-  font-size: 20px;
-  font-family: inherit;
-  padding: 8px;
-  border: none;
-  color: wheat;
-  transition: bacground-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
-    color 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: rgb(55, 53, 168);
+  padding: 0 10px;
+  height: 35px;
+  color: #f0f0f0;
 }
 
-.deleteBtn:hover,
-.deleteBtn:focus {
-  background-color: rgb(59, 114, 181);
-  color: black;
-}
-
-.contactIcon {
-  margin-right: 10px;
-}
-
-.contactParagraph {
-  font-size: 24px;
-  margin-top: 0;
-  margin-bottom: 16px;
-}
-
-.contactParagraph:last-child {
-  margin-bottom: 0;
-}
-
-.modal {
-  position: absolute;
-  inset: 40px;
-  border: 3px solid rgb(204, 204, 204);
-  background-color: rgb(83, 161, 220);
-  overflow: auto;
-  border-radius: 4px;
-  outline: none;
-  padding: 20px;
-  width: 500px;
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  margin-right: auto;
-  margin-left: auto;
-  align-items: center;
-}
-
-.paragraph {
-  font-size: 18px;
-}
-
-.actionBtn {
-  width: 120px;
-  align-self: center;
-  padding: 8px;
-  margin-top: 12px;
-  background-color: rgb(55, 53, 168);
-  border: none;
-  color: wheat;
-  border-radius: 5px;
-  transition: bacground-color 250ms cubic-bezier(0.4, 0, 0.2, 1),
-    color 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  margin-right: 16px;
-}
-
-.actionBtn:last-child {
-  margin-right: 0;
-}
-
-.actionBtn:hover,
-.actionBtn:focus {
-  background-color: rgb(59, 114, 181);
-  color: black;
+@media (prefers-color-scheme: light) {
+  .listItem {
+    border-color: #000;
+  }
+  .deleteBtn {
+    color: #242424;
+  }
 }

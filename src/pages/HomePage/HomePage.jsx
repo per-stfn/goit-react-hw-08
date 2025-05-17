@@ -1,29 +1,15 @@
-import css from "./HomePage.module.css";
+import { FaTasks } from "react-icons/fa";
+import { Helmet } from "react-helmet-async";
+import s from "./HomePage.module.css";
+
 export default function HomePage() {
   return (
-    <div className={css.wrapper}>
-      <p className={css.paragraph}>
-        Welcome to our Contact Management System! After logging in, you gain
-        access to a suite of features that enable you to:
-      </p>
-      <ul className={css.list}>
-        <li className={css.listItem}>
-          Add New Contacts: Easily add new contacts to your address book with
-          our intuitive form.
-        </li>
-        <li className={css.listItem}>
-          Delete Contacts: Keep your contact list up-to-date by removing any
-          outdated or unnecessary contacts with just a few clicks.
-        </li>
-        <li className={css.listItem}>
-          Search Contacts: Quickly find specific contacts using our powerful
-          search functionality.
-        </li>
-      </ul>
-      <p className={css.paragraph}>
-        Experience the convenience of having all your important contacts
-        organized and accessible in one place.
-      </p>
+    <div className={s.headerContainer}>
+      <Helmet>
+        <title>Home page</title>
+      </Helmet>
+      <h1 className={s.header}>The contact manager is ready for you</h1>
+      <FaTasks className={s.icon} />
     </div>
   );
 }

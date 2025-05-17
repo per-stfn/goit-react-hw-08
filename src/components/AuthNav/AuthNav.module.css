@@ -1,15 +1,29 @@
-.navigation {
+.linksContainer {
   display: flex;
-  gap: 8px;
 }
 
 .link {
-  text-decoration: none;
-  color: rgb(168, 141, 213);
-  font-size: 20px;
   display: flex;
+  align-items: center;
+  column-gap: 5px;
+  color: #6c73ff;
+  border-radius: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
+  transition: background-color 250ms cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.link:hover {
+  background-color: #646cff3a;
 }
 
 .active {
-  color: rgb(205, 24, 33);
+  color: #525af8;
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .linksContainer {
+    column-gap: 20px;
+  }
 }

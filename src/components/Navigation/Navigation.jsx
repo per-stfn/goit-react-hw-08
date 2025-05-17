@@ -1,26 +1,27 @@
-import { NavLink } from "react-router-dom";
-import clsx from "clsx";
-import css from "./Navigation.module.css";
+import { NavLink } from "react-router";
+import { FaHome } from "react-icons/fa";
+import { RiContactsBook2Line } from "react-icons/ri";
+import s from "./Navigation.module.css";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
+import clsx from "clsx";
 
-const buildLinkClass = ({ isActive }) => {
-  return clsx(css.link, isActive && css.active);
+const linkBuilder = ({ isActive }) => {
+  return clsx(s.link, isActive && s.active);
 };
 
 export default function Navigation() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
-
   return (
-    <nav className={css.navigation}>
-      <NavLink to="/" className={buildLinkClass}>
-        Home
+    <div className={s.linksContainer}>
+      <NavLink to="/" className={linkBuilder}>
+        <FaHome /> Home
       </NavLink>
       {isLoggedIn && (
-        <NavLink to="/contacts" className={buildLinkClass}>
-          Contacts
+        <NavLink to="/contacts" className={linkBuilder}>
+          <RiContactsBook2Line /> Contacts
         </NavLink>
       )}
-    </nav>
+    </div>
   );
 }

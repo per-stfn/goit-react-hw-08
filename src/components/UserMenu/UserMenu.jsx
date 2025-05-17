@@ -1,20 +1,33 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import s from "./UserMenu.module.css";
 import { selectUser } from "../../redux/auth/selectors";
-
-import css from "./UserMenu.module.css";
-import { logout } from "../../redux/auth/operations";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../redux/auth/operations";
+import { LuLogOut } from "react-icons/lu";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 export default function UserMenu() {
-  const dispatch = useDispatch();
   const user = useSelector(selectUser);
-  const handleClick = () => {
-    dispatch(logout());
-  };
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   return (
-    <div className={css.wrapper}>
-      <p className={css.username}>Welcome, {user}</p>
-      <button className={css.button} type="button" onClick={handleClick}>
-        Logout
+    <div className={s.wrapper}>
+      <p className={s.username}>Welcome, {user.name}</p>
+      <button
+        className={s.logOutBtn}
+        type="button"
+        onClick={() =>
+          dispatch(logOut())
+            .unwrap()
+            .then(() => {
+              toast("See you soon!", { icon: "👋" });
+              navigate("/");
+            })
+        }
+      >
+        <LuLogOut /> Logout
       </button>
     </div>
   );
